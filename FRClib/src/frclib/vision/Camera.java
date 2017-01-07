@@ -1,35 +1,19 @@
 package frclib.vision;
 
-import com.ni.vision.NIVision;
-import com.ni.vision.NIVision.Image;
-
-import edu.wpi.first.wpilibj.vision.AxisCamera;
-import edu.wpi.first.wpilibj.vision.USBCamera;
+import org.opencv.core.Mat;
+import org.opencv.videoio.VideoCapture;
 
 public class Camera {
 
-	USBCamera cam;
-	AxisCamera axiscam;
-	String name = "cam0";
+	private VideoCapture cam = null;
 
-	public Camera(USBCamera cam) {
-		this.cam = cam;
+	public Camera() {
+		cam = new VideoCapture();
 	}
 
-	public Camera(AxisCamera cam) {
-		this.axiscam = cam;
+	public Mat getRawImage() {
+		Mat mat = new Mat();
+		cam.read(mat);
+		return mat;
 	}
-
-	public Camera(String cam) {
-		this.name = cam;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void getImage(Image image, int session) {
-		NIVision.IMAQdxGrab(session, image, 1);
-	}
-
 }
