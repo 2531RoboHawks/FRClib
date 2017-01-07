@@ -13,9 +13,9 @@ public class VisionTracking {
 
 	Camera cam;
 	Image frame;
-	NIVision.Range r = new NIVision.Range();
-	NIVision.Range g = new NIVision.Range();
-	NIVision.Range b = new NIVision.Range();
+	NIVision.Range v1 = new NIVision.Range();
+	NIVision.Range v2 = new NIVision.Range();
+	NIVision.Range v3 = new NIVision.Range();
 
 	float areamin = 10;
 
@@ -59,18 +59,18 @@ public class VisionTracking {
 		}
 	}
 
-	public void setColor(int rmax, int rmin, int gmax, int gmin, int bmax, int bmin) {
-		r.maxValue = rmax;
-		r.minValue = rmin;
-		g.maxValue = gmax;
-		g.minValue = gmin;
-		b.maxValue = bmax;
-		b.minValue = bmin;
+	public void setColor(int max1, int min1, int max2, int min2, int max3, int min3) {
+		v1.maxValue = max1;
+		v1.minValue = min1;
+		v2.maxValue = max2;
+		v2.minValue = min2;
+		v3.maxValue = max3;
+		v3.minValue = min3;
 	}
 
-	public void displayBlobs() {
+	public void HSVdisplayBlobs() {
 		if (tracking) {
-			ArrayList<NIVision.Rect> blobs = getBlobs();
+			ArrayList<NIVision.Rect> blobs = HSVgetBlobs();
 			for (int i = 0; i < blobs.size(); i++) {
 				NIVision.Rect blob = blobs.get(i);
 				NIVision.imaqDrawShapeOnImage(frame, frame, blob, NIVision.DrawMode.DRAW_VALUE,
@@ -80,12 +80,86 @@ public class VisionTracking {
 		}
 	}
 
-	public ArrayList<NIVision.Rect> getBlobs() {
+	public void RGBdisplayBlobs() {
+		if (tracking) {
+			ArrayList<NIVision.Rect> blobs = RGBgetBlobs();
+			for (int i = 0; i < blobs.size(); i++) {
+				NIVision.Rect blob = blobs.get(i);
+				NIVision.imaqDrawShapeOnImage(frame, frame, blob, NIVision.DrawMode.DRAW_VALUE,
+						NIVision.ShapeMode.SHAPE_RECT, 255);
+			}
+			CameraServer.getInstance().setImage(frame);
+		}
+	}
+
+	public void HSLdisplayBlobs() {
+		if (tracking) {
+			ArrayList<NIVision.Rect> blobs = HSLgetBlobs();
+			for (int i = 0; i < blobs.size(); i++) {
+				NIVision.Rect blob = blobs.get(i);
+				NIVision.imaqDrawShapeOnImage(frame, frame, blob, NIVision.DrawMode.DRAW_VALUE,
+						NIVision.ShapeMode.SHAPE_RECT, 255);
+			}
+			CameraServer.getInstance().setImage(frame);
+		}
+	}
+
+	public ArrayList<NIVision.Rect> HSLgetBlobs() {
 		if (tracking) {
 			cam.getImage(frame, session);
 			Image filteredframe = NIVision.imaqCreateImage(ImageType.IMAGE_U8, 0);
 			ArrayList<NIVision.Rect> blobs = new ArrayList<NIVision.Rect>();
-			NIVision.imaqColorThreshold(filteredframe, frame, 255, NIVision.ColorMode.RGB, r, g, b);
+			NIVision.imaqColorThreshold(filteredframe, frame, 255, NIVision.ColorMode.HSL, v1, v2, v3);
+			int numblobs = NIVision.imaqCountParticles(filteredframe, 1);
+			SmartDashboard.putNumber("Blobs in View", numblobs);
+			for (int i = 0; i < numblobs; i++) {
+				int top = (int) NIVision.imaqMeasureParticle(filteredframe, i, 0,
+						NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
+				int left = (int) NIVision.imaqMeasureParticle(filteredframe, i, 0,
+						NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
+				int width = (int) NIVision.imaqMeasureParticle(filteredframe, i, 0,
+						NIVision.MeasurementType.MT_BOUNDING_RECT_WIDTH);
+				int height = (int) NIVision.imaqMeasureParticle(filteredframe, i, 0,
+						NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
+				blobs.add(new NIVision.Rect(top, left, height, width));
+			}
+			return blobs;
+		} else {
+			return null;
+		}
+	}
+
+	public ArrayList<NIVision.Rect> RGBgetBlobs() {
+		if (tracking) {
+			cam.getImage(frame, session);
+			Image filteredframe = NIVision.imaqCreateImage(ImageType.IMAGE_U8, 0);
+			ArrayList<NIVision.Rect> blobs = new ArrayList<NIVision.Rect>();
+			NIVision.imaqColorThreshold(filteredframe, frame, 255, NIVision.ColorMode.RGB, v1, v2, v3);
+			int numblobs = NIVision.imaqCountParticles(filteredframe, 1);
+			SmartDashboard.putNumber("Blobs in View", numblobs);
+			for (int i = 0; i < numblobs; i++) {
+				int top = (int) NIVision.imaqMeasureParticle(filteredframe, i, 0,
+						NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
+				int left = (int) NIVision.imaqMeasureParticle(filteredframe, i, 0,
+						NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
+				int width = (int) NIVision.imaqMeasureParticle(filteredframe, i, 0,
+						NIVision.MeasurementType.MT_BOUNDING_RECT_WIDTH);
+				int height = (int) NIVision.imaqMeasureParticle(filteredframe, i, 0,
+						NIVision.MeasurementType.MT_BOUNDING_RECT_HEIGHT);
+				blobs.add(new NIVision.Rect(top, left, height, width));
+			}
+			return blobs;
+		} else {
+			return null;
+		}
+	}
+
+	public ArrayList<NIVision.Rect> HSVgetBlobs() {
+		if (tracking) {
+			cam.getImage(frame, session);
+			Image filteredframe = NIVision.imaqCreateImage(ImageType.IMAGE_U8, 0);
+			ArrayList<NIVision.Rect> blobs = new ArrayList<NIVision.Rect>();
+			NIVision.imaqColorThreshold(filteredframe, frame, 255, NIVision.ColorMode.HSV, v1, v2, v3);
 			int numblobs = NIVision.imaqCountParticles(filteredframe, 1);
 			SmartDashboard.putNumber("Blobs in View", numblobs);
 			for (int i = 0; i < numblobs; i++) {
