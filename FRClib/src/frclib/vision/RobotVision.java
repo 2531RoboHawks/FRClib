@@ -134,4 +134,8 @@ public class RobotVision {
 		return 0;
 	}
 
+	static {
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+	}
+
 }
