@@ -143,9 +143,4 @@ public class RobotVision {
 		CvSource out = CameraServer.getInstance().putVideo("Vision Tracking", 640, 480);
 		out.putFrame(mat);
 	}
-
-	static {
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-	}
-
 }
