@@ -12,12 +12,12 @@ import org.opencv.imgproc.Imgproc;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.first.wpilibj.CameraServer;
 
-public class RobotVision {
+public class Vision {
 
 	private int min1 = 0, min2 = 0, min3 = 0;
 	private int max1 = 0, max2 = 0, max3 = 0;
 
-	public RobotVision() {
+	public Vision() {
 		CameraServer.getInstance().startAutomaticCapture();
 	}
 
@@ -79,7 +79,7 @@ public class RobotVision {
 	}
 
 	public ArrayList<Rect> HLSgetBlobs() {
-		Mat mat = getRawImage();
+		Mat mat = getImage();
 		ArrayList<Rect> blobs = new ArrayList<Rect>();
 		ArrayList<MatOfPoint> c = new ArrayList<MatOfPoint>();
 		Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2HLS);
@@ -95,7 +95,7 @@ public class RobotVision {
 	}
 
 	public ArrayList<Rect> HSVgetBlobs() {
-		Mat mat = getRawImage();
+		Mat mat = getImage();
 		ArrayList<Rect> blobs = new ArrayList<Rect>();
 		ArrayList<MatOfPoint> c = new ArrayList<MatOfPoint>();
 		Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2HSV);
@@ -111,7 +111,7 @@ public class RobotVision {
 	}
 
 	public ArrayList<Rect> RGBgetBlobs() {
-		Mat mat = getRawImage();
+		Mat mat = getImage();
 		ArrayList<Rect> blobs = new ArrayList<Rect>();
 		ArrayList<MatOfPoint> c = new ArrayList<MatOfPoint>();
 		Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2RGB);
@@ -134,14 +134,25 @@ public class RobotVision {
 		return 0;
 	}
 
-	public static Mat getRawImage() {
+	public Mat getImage() {
 		Mat mat = new Mat();
 		CameraServer.getInstance().getVideo().grabFrame(mat);
 		return mat;
 	}
 
-	public static void putImage(Mat mat) {
-		CvSource out = CameraServer.getInstance().putVideo("Camera", 640, 480);
+	public void putImage(String name, Mat mat) {
+		CvSource out = CameraServer.getInstance().putVideo(name, 640, 480);
 		out.putFrame(mat);
+	}
+
+	public Mat showBlobs(Mat src, ArrayList<Rect> blobs, Scalar color) {
+		Mat mat = src.clone();
+		for (int i = 0; i < blobs.size(); i++) {
+			Rect r = blobs.get(i);
+			if (r != null) {
+				Imgproc.rectangle(mat, r.tl(), r.br(), color, 2);
+			}
+		}
+		return mat;
 	}
 }
