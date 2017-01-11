@@ -18,6 +18,7 @@ public class RobotVision {
 	private int max1 = 0, max2 = 0, max3 = 0;
 
 	public RobotVision() {
+		CameraServer.getInstance().startAutomaticCapture();
 	}
 
 	public void setColor(int min1, int max1, int min2, int max2, int min3, int max3) {
@@ -140,7 +141,7 @@ public class RobotVision {
 	}
 
 	public static void putImage(Mat mat) {
-		CvSource out = CameraServer.getInstance().putVideo("Vision Tracking", 640, 480);
+		CvSource out = CameraServer.getInstance().putVideo("Camera", 640, 480);
 		out.putFrame(mat);
 	}
 }
