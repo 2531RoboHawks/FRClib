@@ -7,6 +7,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import edu.wpi.cscore.CvSink;
@@ -95,6 +96,26 @@ public class Vision {
 			if (mop != null) {
 				blobs.add(Imgproc.boundingRect(mop));
 			}
+		}
+		return blobs;
+	}
+
+	public ArrayList<Rect> getBlobs(Mat src, int minarea, int blur, Scalar minc, Scalar maxc) {
+		Mat mat = src.clone();
+		ArrayList<Rect> blobs = new ArrayList<Rect>();
+		ArrayList<MatOfPoint> c = new ArrayList<MatOfPoint>();
+		Imgproc.blur(mat, mat, new Size(blur, blur));
+		Core.inRange(mat, minc, maxc, mat);
+		Imgproc.findContours(mat, c, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+		for (int i = 0; i < c.size(); i++) {
+			MatOfPoint mop = c.get(i);
+			if (mop != null) {
+				Rect r = Imgproc.boundingRect(mop);
+				if (r.area() > minarea) {
+					blobs.add(r);
+				}
+			}
+
 		}
 		return blobs;
 	}
