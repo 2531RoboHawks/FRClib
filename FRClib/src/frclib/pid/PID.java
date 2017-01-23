@@ -60,7 +60,6 @@ public class PID {
 		} else if (this.output < this.outMin) {
 			this.output = this.outMin;
 		}
-
 		return this.output;
 	}
 }
