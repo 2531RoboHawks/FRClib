@@ -1,3 +1,10 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) FIRST 2016. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
 package frclib.sensors;
 
 import java.nio.ByteBuffer;
@@ -26,7 +33,7 @@ import edu.wpi.first.wpilibj.tables.ITable;
 /**
  * This class is for the ADIS16448 IMU that connects to the RoboRIO MXP port.
  */
-public class ADIS16448 extends GyroBase implements Gyro, PIDSource, LiveWindowSendable {
+public class ADIS16448_IMU extends GyroBase implements Gyro, PIDSource, LiveWindowSendable {
 	private static final double kTimeout = 0.1;
 	private static final double kCalibrationSampleTime = 5.0;
 	private static final double kDegreePerSecondPerLSB = 1.0 / 25.0;
@@ -122,7 +129,6 @@ public class ADIS16448 extends GyroBase implements Gyro, PIDSource, LiveWindowSe
 	private AtomicBoolean m_freed = new AtomicBoolean(false);
 
 	private SPI m_spi;
-	@SuppressWarnings("unused")
 	private DigitalOutput m_reset;
 	private DigitalInput m_interrupt;
 
@@ -137,9 +143,7 @@ public class ADIS16448 extends GyroBase implements Gyro, PIDSource, LiveWindowSe
 		public double mag_x;
 		public double mag_y;
 		public double mag_z;
-		@SuppressWarnings("unused")
 		public double baro;
-		@SuppressWarnings("unused")
 		public double temp;
 		public double dt;
 
@@ -193,9 +197,9 @@ public class ADIS16448 extends GyroBase implements Gyro, PIDSource, LiveWindowSe
 	private boolean m_calculate_started = false;
 
 	private static class AcquireTask implements Runnable {
-		private ADIS16448 imu;
+		private ADIS16448_IMU imu;
 
-		public AcquireTask(ADIS16448 imu) {
+		public AcquireTask(ADIS16448_IMU imu) {
 			this.imu = imu;
 		}
 
@@ -206,9 +210,9 @@ public class ADIS16448 extends GyroBase implements Gyro, PIDSource, LiveWindowSe
 	}
 
 	private static class CalculateTask implements Runnable {
-		private ADIS16448 imu;
+		private ADIS16448_IMU imu;
 
-		public CalculateTask(ADIS16448 imu) {
+		public CalculateTask(ADIS16448_IMU imu) {
 			this.imu = imu;
 		}
 
@@ -224,7 +228,7 @@ public class ADIS16448 extends GyroBase implements Gyro, PIDSource, LiveWindowSe
 	/**
 	 * Constructor.
 	 */
-	public ADIS16448(Axis yaw_axis, AHRSAlgorithm algorithm) {
+	public ADIS16448_IMU(Axis yaw_axis, AHRSAlgorithm algorithm) {
 		m_yaw_axis = yaw_axis;
 		m_algorithm = algorithm;
 
@@ -256,13 +260,13 @@ public class ADIS16448 extends GyroBase implements Gyro, PIDSource, LiveWindowSe
 		}
 
 		// Set IMU internal decimation to 204.8 SPS
-		writeRegister(kRegSMPL_PRD, 201);
+		writeRegister(kRegSMPL_PRD, 0x0201);
 
 		// Enable Data Ready (LOW = Good Data) on DIO1 (PWM0 on MXP) & PoP
-		writeRegister(kRegMSC_CTRL, 0x44);
+		writeRegister(kRegMSC_CTRL, 0x0044);
 
 		// Configure IMU internal Bartlett filter
-		writeRegister(kRegSENS_AVG, 400);
+		writeRegister(kRegSENS_AVG, 0x0400);
 
 		// Read serial number and lot ID
 		// m_serial_num = readRegister(kRegSERIAL_NUM);
@@ -304,14 +308,14 @@ public class ADIS16448 extends GyroBase implements Gyro, PIDSource, LiveWindowSe
 	/*
 	 * Constructor assuming Complementary AHRS algorithm.
 	 */
-	public ADIS16448(Axis yaw_axis) {
+	public ADIS16448_IMU(Axis yaw_axis) {
 		this(yaw_axis, AHRSAlgorithm.kComplementary);
 	}
 
 	/*
 	 * Constructor assuming yaw axis is "Z" and Complementary AHRS algorithm.
 	 */
-	public ADIS16448() {
+	public ADIS16448_IMU() {
 		this(Axis.kZ, AHRSAlgorithm.kComplementary);
 	}
 
