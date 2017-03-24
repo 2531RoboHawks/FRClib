@@ -135,6 +135,66 @@ public class Vision {
 		return blobs;
 	}
 
+	public ArrayList<Rect> TSRGBGgetBlobs(Mat src) {
+		Mat mat = src.clone();
+		ArrayList<Rect> blobs = new ArrayList<Rect>();
+		ArrayList<MatOfPoint> c = new ArrayList<MatOfPoint>();
+		ArrayList<Mat> split = new ArrayList<Mat>();
+		Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2RGB);
+		Imgproc.threshold(mat, mat, threash, 255, Imgproc.THRESH_BINARY);
+		Core.split(mat, split);
+		Mat matg = split.get(1);
+		Core.inRange(matg, new Scalar(min1, min2, min3), new Scalar(max1, max2, max3), mat);
+		Imgproc.findContours(mat, c, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+		for (int i = 0; i < c.size(); i++) {
+			MatOfPoint mop = c.get(i);
+			if (mop != null) {
+				blobs.add(Imgproc.boundingRect(mop));
+			}
+		}
+		return blobs;
+	}
+
+	public ArrayList<Rect> TSRGBRgetBlobs(Mat src) {
+		Mat mat = src.clone();
+		ArrayList<Rect> blobs = new ArrayList<Rect>();
+		ArrayList<MatOfPoint> c = new ArrayList<MatOfPoint>();
+		ArrayList<Mat> split = new ArrayList<Mat>();
+		Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2RGB);
+		Imgproc.threshold(mat, mat, threash, 255, Imgproc.THRESH_BINARY);
+		Core.split(mat, split);
+		Mat matr = split.get(0);
+		Core.inRange(matr, new Scalar(min1, min2, min3), new Scalar(max1, max2, max3), mat);
+		Imgproc.findContours(mat, c, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+		for (int i = 0; i < c.size(); i++) {
+			MatOfPoint mop = c.get(i);
+			if (mop != null) {
+				blobs.add(Imgproc.boundingRect(mop));
+			}
+		}
+		return blobs;
+	}
+
+	public ArrayList<Rect> TSRGBBgetBlobs(Mat src) {
+		Mat mat = src.clone();
+		ArrayList<Rect> blobs = new ArrayList<Rect>();
+		ArrayList<MatOfPoint> c = new ArrayList<MatOfPoint>();
+		ArrayList<Mat> split = new ArrayList<Mat>();
+		Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2RGB);
+		Imgproc.threshold(mat, mat, threash, 255, Imgproc.THRESH_BINARY);
+		Core.split(mat, split);
+		Mat matb = split.get(2);
+		Core.inRange(matb, new Scalar(min1, min2, min3), new Scalar(max1, max2, max3), mat);
+		Imgproc.findContours(mat, c, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+		for (int i = 0; i < c.size(); i++) {
+			MatOfPoint mop = c.get(i);
+			if (mop != null) {
+				blobs.add(Imgproc.boundingRect(mop));
+			}
+		}
+		return blobs;
+	}
+
 	public ArrayList<Rect> TSCGgetBlobs(Mat src) {
 		Mat mat = src.clone();
 		ArrayList<Rect> blobs = new ArrayList<Rect>();
