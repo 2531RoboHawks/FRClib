@@ -6,16 +6,16 @@ public class DriveSystem4 {
 
 	private SpeedController FL, FR, BL, BR;
 
-	public DriveSystem4(SpeedController frontleftmotor, SpeedController frontrightmotor, SpeedController backleftmotor,
-			SpeedController backrightmotor) {
+	public DriveSystem4(SpeedController frontleftmotor, boolean ifl, SpeedController frontrightmotor, boolean ifr, SpeedController backleftmotor, boolean ibl,
+			SpeedController backrightmotor, boolean ibr) {
 		FL = frontleftmotor;
-		FL.setInverted(true);
+		FL.setInverted(ifl);
 		FR = frontrightmotor;
-		FR.setInverted(false);
+		FR.setInverted(ifr);
 		BL = backleftmotor;
-		BL.setInverted(true);
+		BL.setInverted(ibl);
 		BR = frontleftmotor;
-		BR.setInverted(false);
+		BR.setInverted(ibr);
 	}
 
 	public void axisDrive(double x, double y, double z) {
@@ -33,8 +33,8 @@ public class DriveSystem4 {
 	}
 
 	public void arcadeDrive(double forward, double rotation) {
-		double left = forward - (rotation / 2);
-		double right = forward + (rotation / 2);
+		double left = forward - rotation;
+		double right = forward + rotation;
 		FL.set(left);
 		BL.set(left);
 		FR.set(right);

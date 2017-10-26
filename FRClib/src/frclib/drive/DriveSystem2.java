@@ -6,11 +6,11 @@ public class DriveSystem2 {
 
 	private SpeedController L, R;
 
-	public DriveSystem2(SpeedController leftmotor, SpeedController rightmotor) {
+	public DriveSystem2(SpeedController leftmotor, boolean il, SpeedController rightmotor, boolean ir) {
 		L = leftmotor;
-		L.setInverted(true);
+		L.setInverted(il);
 		R = rightmotor;
-		R.setInverted(false);
+		R.setInverted(ir);
 	}
 
 	public void tankDrive(double left, double right) {
@@ -24,8 +24,8 @@ public class DriveSystem2 {
 		L.set(left);
 		R.set(right);
 	}
-	
-	public void stop(){
+
+	public void stop() {
 		L.stopMotor();
 		R.stopMotor();
 	}
