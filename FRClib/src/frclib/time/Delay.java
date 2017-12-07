@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class Delay extends Command {
 
-	boolean done = false;
 	long milliseconds;
 	long endtime = 0;
 
@@ -15,17 +14,14 @@ public class Delay extends Command {
 	protected void initialize() {
 		System.out.println("-> Delay");
 		endtime = System.currentTimeMillis() + milliseconds;
-		done = false;
 	}
 
 	protected void execute() {
-		if (System.currentTimeMillis() > endtime) {
-			done = true;
-		}
+
 	}
 
 	protected boolean isFinished() {
-		return done;
+		return System.currentTimeMillis() > endtime;
 	}
 
 	protected void end() {
