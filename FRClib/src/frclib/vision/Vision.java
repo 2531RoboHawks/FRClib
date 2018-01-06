@@ -23,6 +23,11 @@ public class Vision {
 	private CvSink sink;
 	private CvSource source;
 
+	public Vision(CvSink si, CvSource so) {
+		sink = si;
+		source = so;
+	}
+
 	public Vision(String name, int dev) {
 		UsbCamera cam = new UsbCamera(name, dev);
 		cam.setResolution(320, 240);
