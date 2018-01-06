@@ -30,6 +30,20 @@ public class Vision {
 		source = CameraServer.getInstance().putVideo(name, 320, 240);
 	}
 
+	public Vision() {
+		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
+		cam.setResolution(320, 240);
+		sink = CameraServer.getInstance().getVideo();
+		source = CameraServer.getInstance().putVideo("autocap", 320, 240);
+	}
+
+	public Vision(int w, int h) {
+		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
+		cam.setResolution(w, h);
+		sink = CameraServer.getInstance().getVideo();
+		source = CameraServer.getInstance().putVideo("autocap", 320, 240);
+	}
+
 	public Vision(String name, int dev, int w, int h) {
 		UsbCamera cam = new UsbCamera(name, dev);
 		cam.setResolution(w, h);
@@ -45,7 +59,6 @@ public class Vision {
 
 	public void putImage(Mat mat) {
 		source.putFrame(mat);
-		System.gc();
 	}
 
 	public void showLive() {
