@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj.Timer;
 //import edu.wpi.first.wpilibj.communication.FRCNetworkCommunicationsLibrary.tResourceType;
 //import edu.wpi.first.wpilibj.communication.UsageReporting;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 /**
  * This class is for the ADIS16448 IMU that connects to the RoboRIO MXP port.
@@ -296,7 +295,7 @@ public class ADIS16448 extends GyroBase implements Gyro, PIDSource {
 		m_calculate_task.start();
 
 		// UsageReporting.report(tResourceType.kResourceType_ADIS16448, 0);
-		LiveWindow.addSensor("ADIS16448_IMU", 0, this);
+		// LiveWindow.addSensor("ADIS16448_IMU", 0, this);
 	}
 
 	/*
