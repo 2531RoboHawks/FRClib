@@ -26,13 +26,11 @@ import edu.wpi.first.wpilibj.Timer;
 //import edu.wpi.first.wpilibj.communication.UsageReporting;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.livewindow.LiveWindowSendable;
-import edu.wpi.first.wpilibj.tables.ITable;
 
 /**
  * This class is for the ADIS16448 IMU that connects to the RoboRIO MXP port.
  */
-public class ADIS16448_IMU extends GyroBase implements Gyro, PIDSource, LiveWindowSendable {
+public class ADIS16448_IMU extends GyroBase implements Gyro, PIDSource {
 	private static final double kTimeout = 0.1;
 	private static final double kCalibrationSampleTime = 5.0;
 	private static final double kDegreePerSecondPerLSB = 1.0 / 25.0;
@@ -1118,20 +1116,4 @@ public class ADIS16448_IMU extends GyroBase implements Gyro, PIDSource, LiveWind
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	public void updateTable() {
-		ITable table = getTable();
-		if (table != null) {
-			table.putNumber("Value", getAngle());
-			table.putNumber("Pitch", getPitch());
-			table.putNumber("Roll", getRoll());
-			table.putNumber("Yaw", getYaw());
-			table.putNumber("AccelX", getAccelX());
-			table.putNumber("AccelY", getAccelY());
-			table.putNumber("AccelZ", getAccelZ());
-			table.putNumber("AngleX", getAngleX());
-			table.putNumber("AngleY", getAngleY());
-			table.putNumber("AngleZ", getAngleZ());
-		}
-	}
 }
