@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 /**
  * This class is for the ADIS16448 IMU that connects to the RoboRIO MXP port.
  */
-public class ADIS16448_IMU extends GyroBase implements Gyro, PIDSource {
+public class ADIS16448 extends GyroBase implements Gyro, PIDSource {
 	private static final double kTimeout = 0.1;
 	private static final double kCalibrationSampleTime = 5.0;
 	private static final double kDegreePerSecondPerLSB = 1.0 / 25.0;
@@ -191,9 +191,9 @@ public class ADIS16448_IMU extends GyroBase implements Gyro, PIDSource {
 	private boolean m_calculate_started = false;
 
 	private static class AcquireTask implements Runnable {
-		private ADIS16448_IMU imu;
+		private ADIS16448 imu;
 
-		public AcquireTask(ADIS16448_IMU imu) {
+		public AcquireTask(ADIS16448 imu) {
 			this.imu = imu;
 		}
 
@@ -204,9 +204,9 @@ public class ADIS16448_IMU extends GyroBase implements Gyro, PIDSource {
 	}
 
 	private static class CalculateTask implements Runnable {
-		private ADIS16448_IMU imu;
+		private ADIS16448 imu;
 
-		public CalculateTask(ADIS16448_IMU imu) {
+		public CalculateTask(ADIS16448 imu) {
 			this.imu = imu;
 		}
 
@@ -222,7 +222,7 @@ public class ADIS16448_IMU extends GyroBase implements Gyro, PIDSource {
 	/**
 	 * Constructor.
 	 */
-	public ADIS16448_IMU(Axis yaw_axis, AHRSAlgorithm algorithm) {
+	public ADIS16448(Axis yaw_axis, AHRSAlgorithm algorithm) {
 		m_yaw_axis = yaw_axis;
 		m_algorithm = algorithm;
 
@@ -302,14 +302,14 @@ public class ADIS16448_IMU extends GyroBase implements Gyro, PIDSource {
 	/*
 	 * Constructor assuming Complementary AHRS algorithm.
 	 */
-	public ADIS16448_IMU(Axis yaw_axis) {
+	public ADIS16448(Axis yaw_axis) {
 		this(yaw_axis, AHRSAlgorithm.kComplementary);
 	}
 
 	/*
 	 * Constructor assuming yaw axis is "Z" and Complementary AHRS algorithm.
 	 */
-	public ADIS16448_IMU() {
+	public ADIS16448() {
 		this(Axis.kZ, AHRSAlgorithm.kComplementary);
 	}
 
