@@ -23,34 +23,36 @@ public class Vision {
 	private CvSink sink;
 	private CvSource source;
 
+	private UsbCamera cam;
+
 	public Vision(CvSink si, CvSource so) {
 		sink = si;
 		source = so;
 	}
 
 	public Vision(String name, int dev) {
-		UsbCamera cam = new UsbCamera(name, dev);
+		cam = new UsbCamera(name, dev);
 		cam.setResolution(320, 240);
 		sink = CameraServer.getInstance().getVideo(cam);
 		source = CameraServer.getInstance().putVideo(name, 320, 240);
 	}
 
 	public Vision() {
-		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
+		cam = CameraServer.getInstance().startAutomaticCapture();
 		cam.setResolution(320, 240);
 		sink = CameraServer.getInstance().getVideo();
 		source = CameraServer.getInstance().putVideo("autocap", 320, 240);
 	}
 
 	public Vision(int w, int h) {
-		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
+		cam = CameraServer.getInstance().startAutomaticCapture();
 		cam.setResolution(w, h);
 		sink = CameraServer.getInstance().getVideo();
 		source = CameraServer.getInstance().putVideo("autocap", 320, 240);
 	}
 
 	public Vision(String name, int dev, int w, int h) {
-		UsbCamera cam = new UsbCamera(name, dev);
+		cam = new UsbCamera(name, dev);
 		cam.setResolution(w, h);
 		sink = CameraServer.getInstance().getVideo(cam);
 		source = CameraServer.getInstance().putVideo(name, w, h);
@@ -82,6 +84,10 @@ public class Vision {
 	public void setCanny(int v1, int v2) {
 		this.canny1 = v1;
 		this.canny2 = v2;
+	}
+
+	public void setRes(int w, int h) {
+		cam.setResolution(w, h);
 	}
 
 	public void setThreash(int v) {
