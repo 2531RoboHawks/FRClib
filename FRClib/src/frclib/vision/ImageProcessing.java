@@ -16,8 +16,7 @@ public class ImageProcessing {
 		Mat mat = src.clone();
 		ArrayList<Rect> blobs = new ArrayList<Rect>();
 		ArrayList<MatOfPoint> c = new ArrayList<MatOfPoint>();
-		Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2RGB);
-		Core.inRange(mat, new Scalar(r, g, b), new Scalar(rmax, gmax, bmax), mat);
+		Core.inRange(mat, new Scalar(b, g, r), new Scalar(bmax, gmax, rmax), mat);
 		Imgproc.findContours(mat, c, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
 		for (int i = 0; i < c.size(); i++) {
 			MatOfPoint mop = c.get(i);

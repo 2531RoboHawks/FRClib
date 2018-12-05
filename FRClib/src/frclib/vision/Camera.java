@@ -14,8 +14,8 @@ public class Camera {
 
 	private UsbCamera cam;
 
-	public Camera(String name, int id, int w, int h) {
-		cam = new UsbCamera(name, id);
+	public Camera(String name, int dev, int w, int h) {
+		cam = CameraServer.getInstance().startAutomaticCapture(name, dev);
 		cam.setResolution(w, h);
 		sink = CameraServer.getInstance().getVideo(cam);
 		source = CameraServer.getInstance().putVideo(name, w, h);
