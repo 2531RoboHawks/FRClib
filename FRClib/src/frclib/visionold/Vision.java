@@ -14,6 +14,7 @@ import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 
+@Deprecated
 public class Vision {
 
 	private int min1 = 0, min2 = 0, min3 = 0;
