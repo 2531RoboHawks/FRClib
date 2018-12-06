@@ -16,7 +16,8 @@ public class ImageProcessing {
 		Mat mat = src.clone();
 		ArrayList<Rect> blobs = new ArrayList<Rect>();
 		ArrayList<MatOfPoint> c = new ArrayList<MatOfPoint>();
-		Core.inRange(mat, new Scalar(b, g, r), new Scalar(bmax, gmax, rmax), mat);
+		Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2RGB);
+		Core.inRange(mat, new Scalar(r, g, b), new Scalar(rmax, gmax, bmax), mat);
 		Imgproc.findContours(mat, c, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
 		for (int i = 0; i < c.size(); i++) {
 			MatOfPoint mop = c.get(i);
@@ -25,6 +26,46 @@ public class ImageProcessing {
 			}
 		}
 		return blobs;
+	}
+
+	public static ArrayList<Rect> getBlobsHSV(Mat src, double h, double s, double v, double hmax, double smax,
+			double vmax) {
+		Mat mat = src.clone();
+		ArrayList<Rect> blobs = new ArrayList<Rect>();
+		ArrayList<MatOfPoint> c = new ArrayList<MatOfPoint>();
+		Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2HSV);
+		Core.inRange(mat, new Scalar(h, s, v), new Scalar(hmax, smax, vmax), mat);
+		Imgproc.findContours(mat, c, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+		for (int i = 0; i < c.size(); i++) {
+			MatOfPoint mop = c.get(i);
+			if (mop != null) {
+				blobs.add(Imgproc.boundingRect(mop));
+			}
+		}
+		return blobs;
+	}
+
+	public static ArrayList<Rect> getBlobsHSL(Mat src, double h, double l, double s, double hmax, double lmax,
+			double smax) {
+		Mat mat = src.clone();
+		ArrayList<Rect> blobs = new ArrayList<Rect>();
+		ArrayList<MatOfPoint> c = new ArrayList<MatOfPoint>();
+		Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2HLS);
+		Core.inRange(mat, new Scalar(h, l, s), new Scalar(hmax, lmax, smax), mat);
+		Imgproc.findContours(mat, c, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+		for (int i = 0; i < c.size(); i++) {
+			MatOfPoint mop = c.get(i);
+			if (mop != null) {
+				blobs.add(Imgproc.boundingRect(mop));
+			}
+		}
+		return blobs;
+	}
+
+	public static Mat threashold(Mat src, int threash, int max) {
+		Mat m = src.clone();
+		Imgproc.threshold(m, m, threash, max, Imgproc.THRESH_BINARY);
+		return m;
 	}
 
 	public static double getDistance(Rect rect, double fov, int objectwidth, int imagewidth) {
